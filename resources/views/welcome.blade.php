@@ -8,7 +8,7 @@
                 <div class="panel-heading">Welcome</div>
 
                 <div class="panel-body">
-                    To Digital Voting System.
+                    To Digital Voting System.<img src="./public/images/pic1.jpg" >
                 </div>
             </div>
         </div>

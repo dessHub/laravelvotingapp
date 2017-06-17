@@ -89,6 +89,7 @@
                           <th>Type</th>
                           <th>Year</th>
                           <th>Date</th>
+                          <th>Status</th>
                           <th>Action</th>
 
                         </thead>
@@ -99,9 +100,24 @@
                               <td>{{ $key->type }}</td>
                               <td>{{ $key->year }}</td>
                               <td>{{ $key->date }}</td>
-                              <td><button class="btn btn-danger"><a href="{{ url('/deletedate'.$key->id)}}">
+                              <td>{{ $key->status }}</td>
+                              @if($key->status === "open" )
+                              <td><a href="{{ url('/status'.$key->id)}}">
+                                  <i class="fa fa-btn fa-refresh"></i>Activate </a>
+                              </td>
+                              @elseif($key->status === "closed")
+                              <td><a href="{{ url('/status'.$key->id)}}">
+                                  <i class="fa fa-btn fa-refresh"></i>Open </a>
+                              </td>
+                              @elseif($key->status === "active")
+                              <td><a href="{{ url('/status'.$key->id)}}">
+                                  <i class="fa fa-btn fa-refresh"></i>Close </a>
+                              </td>
+                              @endif
+                              <td><a href="{{ url('/deletedate'.$key->id)}}">
                                   <i class="fa fa-btn fa-remove"></i> Delete</a>
-                              </button></td>
+                              </td>
+
 
                             </tr>
                             @endforeach

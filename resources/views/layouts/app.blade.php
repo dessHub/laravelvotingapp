@@ -26,6 +26,10 @@
     </style>
 </head>
 <body id="app-layout">
+
+  <div class="row container-fluid">
+    <div class="col-md-offset-1 col-md-10" >
+      <div class="col-md-12" style="height:50px;"></div>
     <nav class="navbar navbar-default navbar-static-top">
         <div class="container">
             <div class="navbar-header">
@@ -62,17 +66,20 @@
 
                              <ul class="dropdown-menu" role="menu">
                                <li><a href="{{ url('/setdates') }}">Set Elections Dates</a></li>
-                               <li><a href="{{ url('/verify') }}">Verify Voters</a></li>
-                               <li><a href="{{ url('/verifAsp') }}">Verify Aspirants</a></li>
                                <li><a href="{{ url('/parties') }}">Parties</a></li>
+                               <li><a href="{{ url('/agents') }}">Agents</a></li>
                                </ul>
                          </li>
 
                   <li><a href="{{ url('/counties') }}">Counties</a></li>
                   <li><a href="{{ url('/dockets') }}">Dockets</a></li>
+                     @elseif(Auth::user()->role === 'agent')
+                      <li><a href="{{ url('/verify') }}">Verify Voters</a></li>
+                      <li><a href="{{ url('/verifAsp') }}">Verify Aspirants</a></li>
                      @else
                      <li><a href="{{ url('/types') }}">Elections Dates</a></li>
                      <li><a href="{{ url('/appDock') }}">Dockets</a></li>
+                     <li><a href="{{ url('/appAgent') }}">Vacancy</a></li>
                      @endif
 
                     @endif
@@ -114,5 +121,7 @@
         $( "#datepicker" ).datepicker();
       });
       </script>
+    </div>
+  </div>
 </body>
 </html>

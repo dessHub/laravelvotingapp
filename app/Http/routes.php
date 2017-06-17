@@ -76,12 +76,18 @@ $this->get('aspverify{id}', 'IndexController@aspverify');
 $this->get('setdates', 'IndexController@setdates');
 $this->post('setdates', 'IndexController@addDate');
 $this->get('deletedate{id}', 'IndexController@deletedate');
+$this->get('status{id}', 'IndexController@updatedate');
 
 $this->get('types', 'IndexController@types');
 $this->get('apply{id}', 'IndexController@apply');
 $this->post('voterapp', 'IndexController@voterapp');
 $this->get('verify', 'IndexController@getVerify');
 $this->get('verify{id}', 'IndexController@verify');
+
+$this->get('appAgent', 'IndexController@loadVacancy');
+$this->post('appAgent', 'IndexController@saveVacancy');
+$this->get('agverify{id}', 'IndexController@verifyAgent');
+$this->get('agents', 'IndexController@agents');
 
 $this->get('load{id}', 'IndexController@load');
 $this->post('cast', 'IndexController@cast');

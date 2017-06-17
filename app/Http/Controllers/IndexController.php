@@ -270,6 +270,56 @@ if ($validator->fails()) {
 
 }
 
+protected function loadVacancy(){
+  return view('vacancy');
+}
+
+protected function agents(){
+  $name = Agent::where('status','=','unverified')->get();
+  $agents = Agent::where('status','=','verified')->get();
+  return view('agents')->with('agents',$agents)->with('applicants',$name);
+}
+
+protected function saveVacancy(){
+   $c = Agent::where('user_id','=', Auth::user()->id)->count();
+   $a = Aspirant::where('email','=', Auth::user()->email)->count();
+   if($a > 0){
+     return view('200as');
+   }else {
+   if($c > 0){
+     return view('200');
+   }else {
+     $agent = new Agent();
+     $agent->name = Auth::user()->name;
+     $agent->regNo = Auth::user()->regNo;
+     $agent->phoneno = Auth::user()->phoneno;
+     $agent->email = Auth::user()->email;
+     $agent->user_id = Auth::user()->id;
+     $agent->gender = Auth::user()->gender;
+
+     $agent->save();
+     return view('200');
+   }
+
+}
+}
+
+protected function verifyAgent($id) {
+
+$asp_obj = new Agent();
+$asp_obj->id = $id;
+$asp = Agent::find($asp_obj->id); // Eloquent Model
+$asp->update(['status' => "verified"]);
+$a_id = $asp->user_id;
+
+$user_obj = new User();
+$user_obj->id = $asp->user_id;
+$user = User::find($user_obj->id); // Eloquent Model
+$user->update(['role' => "agent"]);
+
+return Redirect::to('/agents');
+}
+
 protected function delParty($id) {
 
 $hit = Party::find($id);
@@ -449,6 +499,22 @@ return Redirect::to('/parties');
     return Redirect::to('/setdates');
   }
 
+protected function updatedate($id) {
+
+  $date_obj = new Election();
+  $date_obj->id = $id;
+  $date = Election::find($date_obj->id); // Eloquent Model
+  if($date->status === "closed"){
+    $date->update(['status' => "open"]);
+  }elseif($date->status === "open"){
+    $date->update(['status' => "active"]);
+  }elseif($date->status === "active"){
+  $date->update(['status' => "closed"]);
+}
+
+return Redirect::to('/setdates');
+}
+
 protected function types() {
 
 $hit = Election::get();;
@@ -587,11 +653,11 @@ public function load($id)
       $s = $key->Senator;
     }
    $name = Election::where('id','=',$id)->get();
-   $gov = Aspirant::where('docket','=','Governor')->where('county','=',$c)->get();
-   $sen = Aspirant::where('docket','=','Senator')->where('county','=',$c)->get();
-   $wom = Aspirant::where('docket','=','Women Rep')->where('county','=',$c)->get();
-   $mp = Aspirant::where('docket','=','Mp')->where('constituency','=',$con)->get();
-   $w = Aspirant::where('docket','=','Mca')->where('ward','=',$w)->get();
+   $gov = Aspirant::where('docket','=','Governor')->where('county','=',$c)->where('status','=',"verified")->get();
+   $sen = Aspirant::where('docket','=','Senator')->where('county','=',$c)->where('status','=',"verified")->get();
+   $wom = Aspirant::where('docket','=','Women Rep')->where('county','=',$c)->where('status','=',"verified")->get();
+   $mp = Aspirant::where('docket','=','Mp')->where('constituency','=',$con)->where('status','=',"verified")->get();
+   $w = Aspirant::where('docket','=','Mca')->where('ward','=',$w)->where('status','=',"verified")->get();
    return view('voteload')->with('county', $c)->with('constituency', $con)->with('ward', $w)->with('elections', $name)->with('gov', $gov)->with('senator', $sen)->with('women', $wom)->with('mp', $mp)->with('mca', $w);
 
 }

@@ -8,7 +8,7 @@
                 <div class="panel-heading"></div>
 
                 <div class="panel-body">
-                    Your application is under process.
+                    Ooops!! aspirants are not allowed to apply.
                 </div>
             </div>
         </div>
