@@ -12,6 +12,7 @@ use App\Ward;
 use App\Voter;
 use App\Docket;
 use App\Party;
+use App\Ballot;
 use Validator;
 use Auth;
 use App\Http\Requests;
@@ -161,8 +162,7 @@ return view('aspApp')->with('elections', $hit)->with('conts', $conts)->with('doc
 
  protected function aspirantapp() {
    $rules = array(
-           'election' => 'required|max:100',
-           'county' => 'required|max:100',
+           'type' => 'required|max:100',
            'name' => 'required|max:100'
        );
 
@@ -187,8 +187,9 @@ return view('aspApp')->with('elections', $hit)->with('conts', $conts)->with('doc
      $id = Input::get('dock_id');
 
      $aspirant = new Aspirant;
-     $aspirant->type     = Input::get('election');
+     $aspirant->type     = Input::get('type');
      $aspirant->party     = Input::get('party');
+     $aspirant->docket     = Input::get('docket');
      $aspirant->date     = Input::get('date');
      $aspirant->name     = Input::get('name');
      $aspirant->regNo     = Input::get('regNo');
@@ -209,12 +210,21 @@ return view('aspApp')->with('elections', $hit)->with('conts', $conts)->with('doc
       }
     }
 
-  protected function verifAsp() {
+  protected function getAsp() {
 
   $hit = Aspirant::where('status','=','unverified')->get();;
   return view('aspverifications')->with('aspirants', $hit);
   }
 
+protected function aspverify($id) {
+
+$asp_obj = new Aspirant();
+$asp_obj->id = $id;
+$asp = Aspirant::find($asp_obj->id); // Eloquent Model
+$asp->update(['status' => "verified"]);
+
+return Redirect::to('/verifAsp');
+}
 
 public function getparties()
 {
@@ -551,6 +561,126 @@ foreach($ward as $key){
   $con_obj->id = $i;
   $con = Ward::find($con_obj->id); // Eloquent Model
   $con->update(['voters' => $total]);
+}
+
+return Redirect::to('/verify');
+}
+
+public function load($id)
+{
+     $ty = Election::find($id);
+    $count = Ballot::where('user_id','=',Auth::user()->id)->where('date','=',$ty->date)->count();
+    if($count > 0){
+      return view('200vv');
+    }else{
+    $u = Voter::where('user_id','=',Auth::user()->id)->get();
+    $i = '';
+    $c = '';
+    $con = '';
+    $w = '';
+
+    foreach($u as $key){
+      $i = $key->id;
+      $c = $key->county;
+      $con = $key->constituency;
+      $w = $key->ward;
+      $s = $key->Senator;
+    }
+   $name = Election::where('id','=',$id)->get();
+   $gov = Aspirant::where('docket','=','Governor')->where('county','=',$c)->get();
+   $sen = Aspirant::where('docket','=','Senator')->where('county','=',$c)->get();
+   $wom = Aspirant::where('docket','=','Women Rep')->where('county','=',$c)->get();
+   $mp = Aspirant::where('docket','=','Mp')->where('constituency','=',$con)->get();
+   $w = Aspirant::where('docket','=','Mca')->where('ward','=',$w)->get();
+   return view('voteload')->with('county', $c)->with('constituency', $con)->with('ward', $w)->with('elections', $name)->with('gov', $gov)->with('senator', $sen)->with('women', $wom)->with('mp', $mp)->with('mca', $w);
+
+}
+}
+
+protected function cast() {
+
+$hit = Voter::where('user_id','=',Auth::user()->id)->where('status','=','verified')->count();
+if($hit > 0){
+  $cast = new Ballot();
+  $cast->name = Auth::user()->name;
+  $cast->user_id = Auth::user()->id;
+  $cast->regNo = Auth::user()->regNo;
+  $cast->date = Input::get('date');
+  $cast->type = Input::get('type');
+
+   $cast->save();
+
+   $g = Aspirant::findOrFail(Input::get('governor'));
+   $gvotes = $g->votes + 1;
+   $gov_obj = new Aspirant();
+   $gov_obj->id = Input::get('governor');
+   $gov = Aspirant::find($gov_obj->id); // Eloquent Model
+   $gov->update(['votes' => $gvotes]);
+
+   $s = Aspirant::find(Input::get('senator'));
+   $svotes = $s->votes + 1;
+   $sen_obj = new Aspirant();
+   $sen_obj->id = Input::get('senator');
+   $sen = Aspirant::find($sen_obj->id); // Eloquent Model
+   $sen->update(['votes' => $svotes]);
+
+   $w = Aspirant::find(Input::get('women'));
+   $wvotes = $w->votes + 1;
+   $women_obj = new Aspirant();
+   $women_obj->id = Input::get('women');
+   $women = Aspirant::find($women_obj->id); // Eloquent Model
+   $women->update(['votes' => $wvotes]);
+
+   $m = Aspirant::find(Input::get('mp'));
+   $mvotes = $m->votes + 1;
+   $m_obj = new Aspirant();
+   $m_obj->id = Input::get('mp');
+   $m = Aspirant::find($m_obj->id); // Eloquent Model
+   $m->update(['votes' => $mvotes]);
+
+   $mc = Aspirant::find(Input::get('mca'));
+   $mcvotes = $mc->votes + 1;
+   $mc_obj = new Aspirant();
+   $mc_obj->id = Input::get('mca');
+   $mc = Aspirant::find($mc_obj->id); // Eloquent Model
+   $mc->update(['votes' => $mcvotes]);
+
+   return view('200v');
+}
+$county = County::where('name','=',$hit->county)->get();
+$conts = Constituency::where('name','=', $hit->constituency)->get();
+$ward = Ward::where('name','=',$hit->ward)->get();
+
+$voter_obj = new Voter();
+$voter_obj->id = $id;
+$voter = Voter::find($voter_obj->id); // Eloquent Model
+$voter->update(['status' => "verified"]);
+
+foreach($county as $key){
+$total = $key->voters + 1;
+$i = $key->id;
+$con_obj = new County();
+$con_obj->id = $i;
+$con = County::find($con_obj->id); // Eloquent Model
+$con->update(['voters' => $total]);
+}
+
+foreach($conts as $key){
+$total = $key->voters + 1;
+$i = $key->id;
+$con_obj = new Constituency();
+$con_obj->id = $i;
+$con = Constituency::find($con_obj->id); // Eloquent Model
+$con->update(['voters' => $total]);
+}
+
+foreach($ward as $key){
+$total = $key->voters + 1;
+$i = $key->id;
+$con_obj = new Ward();
+$con_obj->id = $i;
+$con = Ward::find($con_obj->id); // Eloquent Model
+$con->update(['voters' => $total]);
 }
 
 return Redirect::to('/verify');

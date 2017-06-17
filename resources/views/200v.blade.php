@@ -5,10 +5,10 @@
     <div class="row">
         <div class="col-md-10 col-md-offset-1">
             <div class="panel panel-default">
-                <div class="panel-heading">Welcome</div>
+                <div class="panel-heading"></div>
 
                 <div class="panel-body">
-                    To Digital Voting System.
+                    Your Have successfully Cast Your Vote..
                 </div>
             </div>
         </div>

@@ -22,7 +22,7 @@
                           <th>County</th>
                           <th>Constituency</th>
                           <th>Ward</th>
-                          <th>Action</th>
+                          <th>Votes</th>
 
                         </thead>
                         <tbody>
@@ -36,9 +36,7 @@
                               <td>{{ $key->county }}</td>
                               <td>{{ $key->constituency }}</td>
                               <td>{{ $key->ward }}</td>
-                              <td><button class="btn btn-default"><a href="{{ url('/aspverify'.$key->id)}}">
-                                  <i class="fa fa-btn fa-default"></i> Verify</a>
-                              </button></td>
+                              <td>{{ $key->votes }}</td>
 
                             </tr>
                             @endforeach

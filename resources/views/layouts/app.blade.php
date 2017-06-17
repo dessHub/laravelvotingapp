@@ -40,27 +40,39 @@
 
                 <!-- Branding Image -->
                 <a class="navbar-brand" href="{{ url('/') }}">
-                    Laravel
+                    eVote
                 </a>
             </div>
 
             <div class="collapse navbar-collapse" id="app-navbar-collapse">
                 <!-- Left Side Of Navbar -->
                 <ul class="nav navbar-nav">
-                    <li><a href="{{ url('/types') }}">Elections Dates</a></li>
-                    <li><a href="{{ url('/appDock') }}">Dockets</a></li>
+
+                    <li><a href="{{ url('/aspirants') }}">Aspirants</a></li>
+                    <li><a href="{{ url('/results') }}">Results</a></li>
                     @if (Auth::guest())
+                    <li><a href="{{ url('/types') }}">Elections Dates</a></li>
+
                     @else
                      @if(Auth::user()->role === 'admin')
+                         <li class="dropdown">
+                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+                                 Admin Pages <span class="caret"></span>
+                             </a>
+
+                             <ul class="dropdown-menu" role="menu">
+                               <li><a href="{{ url('/setdates') }}">Set Elections Dates</a></li>
+                               <li><a href="{{ url('/verify') }}">Verify Voters</a></li>
+                               <li><a href="{{ url('/verifAsp') }}">Verify Aspirants</a></li>
+                               <li><a href="{{ url('/parties') }}">Parties</a></li>
+                               </ul>
+                         </li>
 
                   <li><a href="{{ url('/counties') }}">Counties</a></li>
-                  <li><a href="{{ url('/setdates') }}">Set Elections Dates</a></li>
-                  <li><a href="{{ url('/verify') }}">Verify Voters</a></li>
-                  <li><a href="{{ url('/verifAsp') }}">Verify Aspirants</a></li>
                   <li><a href="{{ url('/dockets') }}">Dockets</a></li>
-                  <li><a href="{{ url('/parties') }}">Parties</a></li>
                      @else
-
+                     <li><a href="{{ url('/types') }}">Elections Dates</a></li>
+                     <li><a href="{{ url('/appDock') }}">Dockets</a></li>
                      @endif
 
                     @endif

@@ -31,6 +31,19 @@ $this::get('/', function () {
     return view('welcome');
 });
 
+$this::get('/aspirants',function() {
+
+$hit = Aspirant::where('status','=','verified')->get();;
+return view('aspirants')->with('aspirants', $hit);
+});
+
+$this::get('/results',function() {
+
+$hit = Aspirant::where('status','=','verified')->orderBy('docket')->get();
+return view('results')->with('aspirants', $hit);
+});
+
+
 $this->get('/signup', function () {
      $counties = County::get();
      $conts = Constituency::get();
@@ -58,6 +71,7 @@ $this->get('appDock', 'IndexController@getDocks');
 $this->get('appDock{id}', 'IndexController@appDock');
 $this->post('appDock', 'IndexController@aspirantapp');
 $this->get('verifAsp', 'IndexController@getAsp');
+$this->get('aspverify{id}', 'IndexController@aspverify');
 
 $this->get('setdates', 'IndexController@setdates');
 $this->post('setdates', 'IndexController@addDate');
@@ -68,3 +82,6 @@ $this->get('apply{id}', 'IndexController@apply');
 $this->post('voterapp', 'IndexController@voterapp');
 $this->get('verify', 'IndexController@getVerify');
 $this->get('verify{id}', 'IndexController@verify');
+
+$this->get('load{id}', 'IndexController@load');
+$this->post('cast', 'IndexController@cast');
