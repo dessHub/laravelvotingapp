@@ -129,6 +129,21 @@
 
                          <div class="col-md-12">
                       <div class="col-md-4">
+                       <div class="form-group{{ $errors->has('president') ? ' has-error' : '' }}">
+                           <label for="president" class="col-md-12 control-label">President</label>
+
+                           <div class="col-md-12">
+                                <select class="form-control" id="president" name="president" required="true" value="{{ old('president') }}" style="background-color : inherit">
+                                    <option  value="">Select president</option>
+                                    @foreach($pres as $key)
+                                    <option  value="{{$key->id}}">{{$key->name}}-{{$key->party}}</option>
+                                     @endforeach
+                                </select>
+                           </div>
+                       </div>
+
+                         </div>
+                      <div class="col-md-4">
                        <div class="form-group{{ $errors->has('governor') ? ' has-error' : '' }}">
                            <label for="governor" class="col-md-12 control-label">Governor</label>
 
@@ -158,26 +173,26 @@
                        </div>
 
                          </div>
-                      <div class="col-md-4">
-                       <div class="form-group{{ $errors->has('women') ? ' has-error' : '' }}">
-                           <label for="women" class="col-md-12 control-label">Women Rep</label>
-
-                           <div class="col-md-12">
-                                <select class="form-control" id="women" name="women" required="true" value="{{ old('women') }}" style="background-color : inherit">
-                                    <option  value="">Select Women Rep</option>
-                                    @foreach($women as $key)
-                                    <option  value="{{$key->id}}">{{$key->name}}-{{$key->party}}</option>
-                                     @endforeach
-                                </select>
-                           </div>
-                       </div>
-
-                         </div>
 
 
                          </div>
 
                           <div class="col-md-12">
+                       <div class="col-md-4">
+                        <div class="form-group{{ $errors->has('women') ? ' has-error' : '' }}">
+                            <label for="women" class="col-md-12 control-label">Women Rep</label>
+
+                            <div class="col-md-12">
+                                 <select class="form-control" id="women" name="women" required="true" value="{{ old('women') }}" style="background-color : inherit">
+                                     <option  value="">Select Women Rep</option>
+                                     @foreach($women as $key)
+                                     <option  value="{{$key->id}}">{{$key->name}}-{{$key->party}}</option>
+                                      @endforeach
+                                 </select>
+                            </div>
+                        </div>
+
+                          </div>
                        <div class="col-md-4">
                         <div class="form-group{{ $errors->has('mp') ? ' has-error' : '' }}">
                             <label for="mp" class="col-md-12 control-label">Memper Of Parliament</label>

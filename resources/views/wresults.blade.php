@@ -8,7 +8,7 @@
     <div class="row">
         <div class="col-md-8">
             <div class="panel panel-default">
-                <div class="panel-heading">Presidentials Results</div>
+                <div class="panel-heading">Mca Results</div>
                 <div class="panel-body">
                   <div class="table-responsive">
                     <table class="table table-hover table-striped">
@@ -21,7 +21,7 @@
 
                         </thead>
                         <tbody>
-                           @foreach($aspirants as $key)
+                           @foreach($mca as $key)
                             <tr>
                               <td>{{ $key->id }}</td>
                               <td>{{ $key->name }}</td>
@@ -40,7 +40,7 @@
         </div>
             <div class="col-md-4">
                 <div class="panel panel-default">
-                    <div class="panel-heading">View County Results</div>
+                    <div class="panel-heading">Related Ward Results</div>
                     <div class="panel-body">
                       <div class="table-responsive">
                         <table class="table table-hover table-striped">
@@ -51,7 +51,7 @@
                             <tbody>
                                @foreach($counties as $key)
                                 <tr>
-                                  <td><a href="{{url('cresults'.$key->name)}}">{{ $key->name }}</a></td>
+                                  <td><a href="{{url('wresults'.$key->name)}}">{{ $key->name }}</a></td>
 
                                 </tr>
                                 @endforeach

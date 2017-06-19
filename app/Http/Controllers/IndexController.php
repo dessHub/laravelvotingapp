@@ -653,12 +653,13 @@ public function load($id)
       $s = $key->Senator;
     }
    $name = Election::where('id','=',$id)->get();
+   $pres = Aspirant::where('docket','=','President')->where('status','=',"verified")->get();
    $gov = Aspirant::where('docket','=','Governor')->where('county','=',$c)->where('status','=',"verified")->get();
    $sen = Aspirant::where('docket','=','Senator')->where('county','=',$c)->where('status','=',"verified")->get();
    $wom = Aspirant::where('docket','=','Women Rep')->where('county','=',$c)->where('status','=',"verified")->get();
    $mp = Aspirant::where('docket','=','Mp')->where('constituency','=',$con)->where('status','=',"verified")->get();
    $w = Aspirant::where('docket','=','Mca')->where('ward','=',$w)->where('status','=',"verified")->get();
-   return view('voteload')->with('county', $c)->with('constituency', $con)->with('ward', $w)->with('elections', $name)->with('gov', $gov)->with('senator', $sen)->with('women', $wom)->with('mp', $mp)->with('mca', $w);
+   return view('voteload')->with('pres', $pres)->with('county', $c)->with('constituency', $con)->with('ward', $w)->with('elections', $name)->with('gov', $gov)->with('senator', $sen)->with('women', $wom)->with('mp', $mp)->with('mca', $w);
 
 }
 }
@@ -675,6 +676,13 @@ if($hit > 0){
   $cast->type = Input::get('type');
 
    $cast->save();
+
+   $g = Aspirant::findOrFail(Input::get('president'));
+   $gvotes = $g->votes + 1;
+   $gov_obj = new Aspirant();
+   $gov_obj->id = Input::get('president');
+   $gov = Aspirant::find($gov_obj->id); // Eloquent Model
+   $gov->update(['votes' => $gvotes]);
 
    $g = Aspirant::findOrFail(Input::get('governor'));
    $gvotes = $g->votes + 1;

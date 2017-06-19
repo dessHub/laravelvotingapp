@@ -39,8 +39,37 @@ return view('aspirants')->with('aspirants', $hit);
 
 $this::get('/results',function() {
 
-$hit = Aspirant::where('status','=','verified')->orderBy('docket')->get();
-return view('results')->with('aspirants', $hit);
+$hit = Aspirant::where('docket','=','President')->where('status','=','verified')->orderBy('votes')->get();
+$counties = County::get();
+return view('results')->with('aspirants', $hit)->with('counties', $counties);
+});
+
+$this::get('/cresults{id}',function($id) {
+
+$gov = Aspirant::where('county','=',$id)->where('docket','=','Governor')->where('status','=','verified')->orderBy('votes')->get();
+$sen = Aspirant::where('county','=',$id)->where('docket','=','Senator')->where('status','=','verified')->orderBy('votes')->get();
+$wom = Aspirant::where('county','=',$id)->where('docket','=','Women Rep')->where('status','=','verified')->orderBy('votes')->get();
+$counties = Constituency::where('county','=',$id)->get();
+return view('cresults')->with('gov', $gov)->with('sen', $sen)->with('women', $wom)->with('counties', $counties);
+});
+
+$this::get('/cnresults{id}',function($id) {
+
+$gov = Aspirant::where('constituency','=',$id)->where('docket','=','Mp')->where('status','=','verified')->orderBy('votes')->get();
+$counties = Ward::where('constituency','=',$id)->get();
+return view('cnresults')->with('mp', $gov)->with('counties', $counties);
+});
+
+$this::get('/wresults{id}',function($id) {
+
+$gov = Aspirant::where('ward','=',$id)->where('docket','=','Mca')->where('status','=','verified')->orderBy('votes')->get();
+$c = "";
+$w = Ward::where('name','=',$id)->get();
+foreach($w as $key){
+  $c = $key->constituency;
+}
+$counties = Ward::where('constituency','=',$c)->get();
+return view('wresults')->with('mca', $gov)->with('counties', $counties);
 });
 
 

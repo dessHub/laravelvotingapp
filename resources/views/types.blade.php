@@ -30,13 +30,13 @@
                               <td>{{ $key->date }}</td>
                               <td>{{ $key->status }}</td>
                               @if($key->status === "open")
-                              <td><button class="btn btn-default"><a href="{{ url('/apply'.$key->id)}}">
+                              <td><a href="{{ url('/apply'.$key->id)}}">
                                   <i class="fa fa-btn fa-remove"></i> Apply</a>
-                              </button></td>
+                              </td>
                               @elseif($key->status === "active")
-                              <td><button class="btn btn-default"><a href="{{ url('/load'.$key->id)}}">
+                              <td><a href="{{ url('/load'.$key->id)}}">
                                   <i class="fa fa-btn fa-arrow"></i> Vote</a>
-                              </button></td>
+                              </td>
                               @endif
 
                             </tr>

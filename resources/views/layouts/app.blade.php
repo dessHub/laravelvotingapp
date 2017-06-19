@@ -18,6 +18,11 @@
     <style>
         body {
             font-family: 'Lato';
+
+        }
+
+        .container {
+
         }
 
         .fa-btn {
@@ -29,8 +34,11 @@
 
   <div class="row container-fluid">
     <div class="col-md-offset-1 col-md-10" >
-      <div class="col-md-12" style="height:50px;"></div>
-    <nav class="navbar navbar-default navbar-static-top">
+      <div class="row text-center">
+      <div class="col-md-12" style="background-color:green;padding-bottom:16px;">
+      <h2>254VotingSystem</h2>
+    </div></div>
+    <nav class="navbar navbar-default navbar-static-top" style="background-color:silver;">
         <div class="container">
             <div class="navbar-header">
 
