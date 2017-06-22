@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\User;
+use App\Citizen;
 use Validator;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\ThrottlesLogins;
@@ -28,7 +29,7 @@ class AuthController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/';
+    protected $redirectTo = '/red';
 
     /**
      * Create a new authentication controller instance.
@@ -49,14 +50,8 @@ class AuthController extends Controller
     protected function validator(array $data)
     {
         return Validator::make($data, [
-            'name' => 'required|max:255',
             'regNo' => 'required|max:255',
             'email' => 'required|email|max:255|unique:users',
-            'phoneno' => 'required|max:13|min:10|unique:users',
-            'county' => 'required|max:255',
-            'constituency' => 'required|max:255',
-            'ward' => 'required|max:255',
-            'gender' => 'required|max:255',
             'password' => 'required|min:6|confirmed',
         ]);
     }
@@ -69,16 +64,35 @@ class AuthController extends Controller
      */
     protected function create(array $data)
     {
+      $count = Citizen::where('id','=', $data['regNo'])->count();
+      if($count > 0){
+          $cit = Citizen::find($data['regNo']);
         return User::create([
-            'name' => $data['name'],
+
+
+            'name' => $cit->name,
             'email' => $data['email'],
-            'phoneno' => $data['phoneno'],
-            'gender' => $data['gender'],
-            'county' => $data['county'],
-            'constituency' => $data['constituency'],
-            'ward' => $data['ward'],
+            'phoneno' => $cit->phoneno,
+            'gender' => $cit->gender,
+            'county' => $cit->county,
+            'constituency' => $cit->constituency,
+            'ward' => $cit->ward,
             'regNo' => $data['regNo'],
             'password' => bcrypt($data['password']),
         ]);
+      }else {
+        return User::create([
+        'name' => "Na",
+        'email' => $data['email'],
+        'phoneno' => "0000000000",
+        'gender' => "NA",
+        'county' => "NA",
+        'constituency' => "NA",
+        'ward' => "NA",
+        'role' => "unknown",
+        'regNo' => $data['regNo'],
+        'password' => bcrypt($data['password']),
+        ]);
+      }
     }
 }

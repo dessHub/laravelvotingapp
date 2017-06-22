@@ -84,7 +84,7 @@
                      @elseif(Auth::user()->role === 'agent')
                       <li><a href="{{ url('/verify') }}">Verify Voters</a></li>
                       <li><a href="{{ url('/verifAsp') }}">Verify Aspirants</a></li>
-                     @else
+                     @elseif(Auth::user()->role === 'normal')
                      <li><a href="{{ url('/types') }}">Elections Dates</a></li>
                      <li><a href="{{ url('/appDock') }}">Dockets</a></li>
                      <li><a href="{{ url('/appAgent') }}">Vacancy</a></li>

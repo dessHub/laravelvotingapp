@@ -28,6 +28,7 @@ use Illuminate\Support\Facades\Redirect;
 */
 
 $this::get('/', function () {
+
     return view('welcome');
 });
 
@@ -81,6 +82,15 @@ $this->get('/signup', function () {
 });
 
 $this::auth();
+
+$this::get('/red', function () {
+  if(Auth::user()->role === 'unknown'){
+    return view('404');
+  }else{
+    return Redirect::to('/');
+  }
+
+});
 
 $this::get('/home', 'HomeController@index');
 
